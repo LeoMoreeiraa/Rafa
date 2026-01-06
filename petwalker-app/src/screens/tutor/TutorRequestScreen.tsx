@@ -72,10 +72,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   notes: {
-    backgroundColor: 'rgba(36, 99, 235, 0.08)',
+    backgroundColor: 'rgba(15, 118, 110, 0.08)',
     padding: spacing.md,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(96, 165, 250, 0.2)',
+    borderColor: 'rgba(15, 118, 110, 0.18)',
   },
 });

@@ -17,7 +17,7 @@ const navigationTheme: Theme = {
     card: colors.surface,
     text: colors.text,
     primary: colors.primary,
-    border: 'rgba(148, 163, 184, 0.2)',
+    border: 'rgba(15, 118, 110, 0.12)',
     notification: colors.accent,
   },
 };

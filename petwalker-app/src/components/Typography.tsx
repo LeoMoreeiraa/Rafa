@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
-import { StyleSheet, Text, TextStyle } from 'react-native';
+import { StyleProp, StyleSheet, Text, TextStyle } from 'react-native';
 import { colors, typography } from '../theme';
 
 interface TextProps {
   children?: ReactNode;
   align?: 'left' | 'center' | 'right';
-  style?: TextStyle;
+  style?: StyleProp<TextStyle>;
   numberOfLines?: number;
 }
 

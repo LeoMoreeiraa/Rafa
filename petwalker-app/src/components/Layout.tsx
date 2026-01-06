@@ -31,10 +31,13 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: spacing.lg,
     gap: spacing.md,
+    backgroundColor: colors.background,
+    paddingBottom: spacing.xl,
   },
   flex: {
     flex: 1,
     padding: spacing.lg,
     gap: spacing.md,
+    backgroundColor: colors.background,
   },
 });

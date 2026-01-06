@@ -57,8 +57,9 @@ export function TutorCommunityScreen() {
             <Button variant="secondary" onPress={() => togglePostLike(post.id)}>
               <View style={styles.inline}>
                 <Feather
-                  name={post.liked ? 'thumbs-up' : 'thumbs-up'}                  size={18}
-                  color={post.liked ? colors.accent : colors.text}
+                  name={post.liked ? 'thumbs-up' : 'thumbs-up'}
+                  size={18}
+                  color={post.liked ? colors.accent : colors.muted}
                 />
                 <Body style={styles.inlineText}>{post.liked ? 'Curtido' : 'Curtir'}</Body>
               </View>
@@ -68,7 +69,7 @@ export function TutorCommunityScreen() {
                 <Feather
                   name={post.saved ? 'bookmark' : 'bookmark'}
                   size={18}
-                  color={post.saved ? colors.accent : colors.text}
+                  color={post.saved ? colors.accent : colors.muted}
                 />
                 <Body style={styles.inlineText}>{post.saved ? 'Salvo' : 'Salvar'}</Body>
               </View>
@@ -98,6 +99,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceAlt,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(15, 118, 110, 0.12)',
   },
   avatarInitial: {
     fontSize: 18,
@@ -124,5 +127,6 @@ const styles = StyleSheet.create({
   },
   inlineText: {
     fontWeight: '600',
+    color: colors.primary,
   },
 });

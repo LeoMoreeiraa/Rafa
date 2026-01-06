@@ -12,7 +12,9 @@ export function Button({ children, variant = 'primary', onPress }: ButtonProps) 
   return (
     <Pressable onPress={onPress} style={({ pressed }) => [styles.base, styles[variant], pressed && styles.pressed]}>
       {typeof children === 'string' ? (
-        <Text style={[styles.text, variant === 'ghost' && styles.ghostText]}>{children}</Text>
+        <Text style={[styles.text, variant === 'primary' && styles.textOnPrimary, variant === 'ghost' && styles.textGhost]}>
+          {children}
+        </Text>
       ) : (
         <View style={styles.customContent}>{children}</View>
       )}
@@ -31,20 +33,25 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   secondary: {
-    backgroundColor: 'rgba(148, 163, 184, 0.18)',
+    backgroundColor: 'rgba(15, 118, 110, 0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(15, 118, 110, 0.18)',
   },
   ghost: {
     backgroundColor: 'transparent',
   },
   pressed: {
-    opacity: 0.85,
+    opacity: 0.9,
   },
   text: {
-    color: colors.text,
+    color: colors.primary,
     fontSize: typography.body,
     fontWeight: '600',
   },
-  ghostText: {
+  textOnPrimary: {
+    color: '#ffffff',
+  },
+  textGhost: {
     color: colors.muted,
   },
   customContent: {

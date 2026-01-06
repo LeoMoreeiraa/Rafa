@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs,
-    backgroundColor: 'rgba(148, 163, 184, 0.15)',
+    backgroundColor: 'rgba(15, 118, 110, 0.08)',
   },
   text: {
     color: colors.muted,
@@ -32,23 +32,23 @@ const styles = StyleSheet.create({
 const variantStyles = StyleSheet.create({
   default: {},
   active: {
-    backgroundColor: 'rgba(37, 99, 235, 0.28)',
+    backgroundColor: 'rgba(15, 118, 110, 0.18)',
   },
   success: {
-    backgroundColor: 'rgba(52, 211, 153, 0.22)',
+    backgroundColor: 'rgba(22, 163, 74, 0.18)',
   },
   warning: {
-    backgroundColor: 'rgba(250, 204, 21, 0.2)',
+    backgroundColor: 'rgba(249, 115, 22, 0.18)',
   },
   danger: {
-    backgroundColor: 'rgba(248, 113, 113, 0.2)',
+    backgroundColor: 'rgba(220, 38, 38, 0.16)',
   },
 });
 
 const variantTextStyles = StyleSheet.create({
   default: {},
   active: {
-    color: colors.text,
+    color: colors.primary,
   },
   success: {
     color: colors.success,

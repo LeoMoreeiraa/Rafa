@@ -7,7 +7,7 @@ import { ScreenContainer } from '../../components/Layout';
 import { Pill } from '../../components/Pill';
 import { PillRow } from '../../components/PillRow';
 import { colors, spacing, radius } from '../../theme';
-import { LiveMap } from '../../components/LiveMap';
+import { LiveRouteMap } from '../../components/LiveRouteMap';
 import { usePrototypeData } from '../../context/PrototypeContext';
 
 export function TutorHomeScreen() {
@@ -46,7 +46,14 @@ export function TutorHomeScreen() {
       <Card>
         <Subheading>Próximo passeio</Subheading>
         <Caption>Hoje, 17h • Thor (Labrador)</Caption>
-        <LiveMap path={map.path} currentPosition={map.currentPosition} destination={map.destination} height={200} />
+        <LiveRouteMap
+          path={map.path}
+          currentIndex={map.currentIndex}
+          currentPosition={map.currentPosition}
+          destination={map.destination}
+          statusLabel={statusLabelMap[nextRide.status]}
+          etaMinutes={nextRide.etaMinutes}
+        />
         <PillRow>
           <Pill variant="active">Status: {statusLabelMap[nextRide.status]}</Pill>
           <Pill>{etaLabel}</Pill>
@@ -126,7 +133,7 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: 10,
-    backgroundColor: 'rgba(96, 165, 250, 0.2)',
+    backgroundColor: 'rgba(15, 118, 110, 0.12)',
     borderRadius: 999,
     overflow: 'hidden',
   },

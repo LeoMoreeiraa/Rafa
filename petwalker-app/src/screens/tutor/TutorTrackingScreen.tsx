@@ -5,7 +5,7 @@ import { Pill } from '../../components/Pill';
 import { PillRow } from '../../components/PillRow';
 import { Body, Caption, Heading, Subheading } from '../../components/Typography';
 import { usePrototypeData } from '../../context/PrototypeContext';
-import { LiveMap } from '../../components/LiveMap';
+import { LiveRouteMap } from '../../components/LiveRouteMap';
 
 export function TutorTrackingScreen() {
   const {
@@ -39,7 +39,14 @@ export function TutorTrackingScreen() {
         <Caption>
           Carla começou às 16h05 • Status atual: {statusLabelMap[nextRide.status]} • {nextRide.distanceKm} km percorridos
         </Caption>
-        <LiveMap path={map.path} currentPosition={map.currentPosition} destination={map.destination} />
+        <LiveRouteMap
+          path={map.path}
+          currentIndex={map.currentIndex}
+          currentPosition={map.currentPosition}
+          destination={map.destination}
+          statusLabel={statusLabelMap[nextRide.status]}
+          etaMinutes={nextRide.etaMinutes}
+        />
         <PillRow>
           <Pill variant="active">Status: {statusLabelMap[nextRide.status]}</Pill>
           <Pill>Fotos ({nextRide.photos})</Pill>

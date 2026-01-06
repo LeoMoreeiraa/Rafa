@@ -15,10 +15,15 @@ export function AdminNavigator() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: colors.surface,
-          borderTopColor: 'rgba(148, 163, 184, 0.2)',
+          borderTopColor: 'rgba(15, 118, 110, 0.12)',
+          paddingVertical: 6,
+          height: 72,
         },
-        tabBarActiveTintColor: colors.text,
+        tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.muted,
+        tabBarLabelStyle: {
+          fontWeight: '600',
+        },
       }}
     >
       <Tab.Screen

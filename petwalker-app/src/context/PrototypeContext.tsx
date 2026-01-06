@@ -92,16 +92,16 @@ type PrototypeContextValue = {
   advanceTutorRide: () => void;
   toggleTutorDemand: () => void;
   toggleWalkerOpportunity: () => void;
-  advanceWalkerRide: () => void;
-  resolveAdminAlert: (id: string) => void;
   toggleProductFavorite: (id: string) => void;
   purchaseMarketplaceProduct: (id: string) => void;
   togglePostLike: (id: string) => void;
   togglePostSave: (id: string) => void;
+  advanceWalkerRide: () => void;
+  resolveAdminAlert: (id: string) => void;
   resetMockData: () => void;
 };
 
-const initialState: PrototypeState = {
+const createInitialState = (): PrototypeState => ({
   tutor: {
     nextRide: {
       status: 'buscando',
@@ -140,7 +140,7 @@ const initialState: PrototypeState = {
         id: 'assinatura-premium',
         title: 'Assinatura Premium Care',
         subtitle: 'Passeador preferencial + relatório de saúde mensal',
-        price: 249.0,
+        price: 249,
         image: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=800&q=80',
         stock: 12,
         badge: 'Novo',
@@ -230,28 +230,35 @@ const initialState: PrototypeState = {
       { id: '45852', description: 'Suporte solicitado via app', severity: 'warning', minutes: 4 },
     ],
   },
-};
+});
 
 const PrototypeContext = createContext<PrototypeContextValue | undefined>(undefined);
 
 export function PrototypeProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<PrototypeState>(initialState);
+  const [state, setState] = useState<PrototypeState>(createInitialState());
 
   const advanceTutorRide = () => {
     setState((prev) => {
       const sequence: TutorRideStatus[] = ['buscando', 'a-caminho', 'passeando', 'retornando', 'concluido'];
       const currentIndex = sequence.indexOf(prev.tutor.nextRide.status);
       const nextStatus = sequence[currentIndex + 1] ?? 'buscando';
-      const shouldReset = prev.tutor.nextRide.status === 'concluido' && nextStatus === 'buscando';
       const path = prev.tutor.map.path;
-      const currentPathIndex = shouldReset ? 0 : Math.min(prev.tutor.map.currentIndex + 1, path.length - 1);
-      const nextPathIndex = shouldReset ? 0 : currentPathIndex;
+      const shouldReset = prev.tutor.nextRide.status === 'concluido' && nextStatus === 'buscando';
+      const nextPathIndex = shouldReset ? 0 : Math.min(prev.tutor.map.currentIndex + 1, path.length - 1);
       const nextPosition = path[nextPathIndex] ?? path[path.length - 1];
-      const progressRatio = path.length > 1 ? nextPathIndex / (path.length - 1) : 0;
       const totalDistanceKm = 2.3;
+      const progressRatio = path.length > 1 ? nextPathIndex / (path.length - 1) : 0;
       const nextDistance = Number((totalDistanceKm * progressRatio).toFixed(1));
       const nextEta =
-        nextStatus === 'a-caminho' ? 8 : nextStatus === 'passeando' ? 12 : nextStatus === 'retornando' ? 4 : nextStatus === 'concluido' ? 0 : 12;
+        nextStatus === 'a-caminho'
+          ? 8
+          : nextStatus === 'passeando'
+            ? 12
+            : nextStatus === 'retornando'
+              ? 4
+              : nextStatus === 'concluido'
+                ? 0
+                : 12;
       const nextPhotos =
         nextStatus === 'passeando' || nextStatus === 'retornando'
           ? prev.tutor.nextRide.photos + 1
@@ -295,87 +302,90 @@ export function PrototypeProvider({ children }: { children: ReactNode }) {
   };
 
   const toggleWalkerOpportunity = () => {
+    setState((prev) => {
+      const wasAccepted = prev.walker.highlightedOpportunity.accepted;
+      return {
+        ...prev,
+        walker: {
+          ...prev.walker,
+          highlightedOpportunity: {
+            ...prev.walker.highlightedOpportunity,
+            accepted: !wasAccepted,
+          },
+          rideStatus: wasAccepted ? 'livre' : 'aceitou',
+        },
+      };
+    });
+  };
+
+  const toggleProductFavorite = (id: string) => {
     setState((prev) => ({
       ...prev,
-      walker: {
-        ...prev.walker,
-        highlightedOpportunity: {
-          ...prev.walker.highlightedOpportunity,
-          accepted: !prev.walker.highlightedOpportunity.accepted,
-        },
-        rideStatus: prev.walker.highlightedOpportunity.accepted ? 'livre' : 'aceitou',
+      tutor: {
+        ...prev.tutor,
+        marketplace: prev.tutor.marketplace.map((product) =>
+          product.id === id ? { ...product, favorited: !product.favorited } : product,
+        ),
       },
-      const toggleProductFavorite = (id: string) => {
-        setState((prev) => ({
-          ...prev,
-          tutor: {
-            ...prev.tutor,
-            marketplace: prev.tutor.marketplace.map((product) =>
-              product.id === id ? { ...product, favorited: !product.favorited } : product,
-            ),
-          },
-        }));
-      };
+    }));
+  };
 
-      const purchaseMarketplaceProduct = (id: string) => {
-        setState((prev) => ({
-          ...prev,
-          tutor: {
-            ...prev.tutor,
-            marketplace: prev.tutor.marketplace.map((product) => {
-              if (product.id !== id) {
-                return product;
+  const purchaseMarketplaceProduct = (id: string) => {
+    setState((prev) => ({
+      ...prev,
+      tutor: {
+        ...prev.tutor,
+        marketplace: prev.tutor.marketplace.map((product) => {
+          if (product.id !== id) {
+            return product;
+          }
+
+          const nextStock = Math.max(0, product.stock - 1);
+          const statusBadge = nextStock === 0 ? 'Esgotado' : product.badge ?? 'Popular';
+
+          return {
+            ...product,
+            stock: nextStock,
+            badge: statusBadge,
+            favorited: true,
+          };
+        }),
+      },
+    }));
+  };
+
+  const togglePostLike = (id: string) => {
+    setState((prev) => ({
+      ...prev,
+      tutor: {
+        ...prev.tutor,
+        communityFeed: prev.tutor.communityFeed.map((post) =>
+          post.id === id
+            ? {
+                ...post,
+                liked: !post.liked,
+                likes: post.liked ? Math.max(0, post.likes - 1) : post.likes + 1,
               }
+            : post,
+        ),
+      },
+    }));
+  };
 
-              const nextStock = Math.max(0, product.stock - 1);
-              const statusBadge = nextStock === 0 ? 'Esgotado' : product.badge ?? 'Popular';
-
-              return {
-                ...product,
-                stock: nextStock,
-                badge: statusBadge,
-                favorited: true,
-              };
-            }),
-          },
-        }));
-      };
-
-      const togglePostLike = (id: string) => {
-        setState((prev) => ({
-          ...prev,
-          tutor: {
-            ...prev.tutor,
-            communityFeed: prev.tutor.communityFeed.map((post) =>
-              post.id === id
-                ? {
-                    ...post,
-                    liked: !post.liked,
-                    likes: post.liked ? Math.max(0, post.likes - 1) : post.likes + 1,
-                  }
-                : post,
-            ),
-          },
-        }));
-      };
-
-      const togglePostSave = (id: string) => {
-        setState((prev) => ({
-          ...prev,
-          tutor: {
-            ...prev.tutor,
-            communityFeed: prev.tutor.communityFeed.map((post) =>
-              post.id === id
-                ? {
-                    ...post,
-                    saved: !post.saved,
-                  }
-                : post,
-            ),
-          },
-        }));
-      };
-
+  const togglePostSave = (id: string) => {
+    setState((prev) => ({
+      ...prev,
+      tutor: {
+        ...prev.tutor,
+        communityFeed: prev.tutor.communityFeed.map((post) =>
+          post.id === id
+            ? {
+                ...post,
+                saved: !post.saved,
+              }
+            : post,
+        ),
+      },
     }));
   };
 
@@ -384,7 +394,10 @@ export function PrototypeProvider({ children }: { children: ReactNode }) {
       const sequence: WalkerRideStatus[] = ['livre', 'aceitou', 'em-andamento', 'finalizado'];
       const currentIndex = sequence.indexOf(prev.walker.rideStatus);
       const nextStatus = sequence[currentIndex + 1] ?? 'livre';
-      const earnedAmount = prev.walker.rideStatus === 'em-andamento' && nextStatus === 'finalizado' ? prev.walker.highlightedOpportunity.reward : 0;
+      const earnedAmount =
+        prev.walker.rideStatus === 'em-andamento' && nextStatus === 'finalizado'
+          ? prev.walker.highlightedOpportunity.reward
+          : 0;
 
       return {
         ...prev,
@@ -427,7 +440,7 @@ export function PrototypeProvider({ children }: { children: ReactNode }) {
     }));
   };
 
-  const resetMockData = () => setState(initialState);
+  const resetMockData = () => setState(createInitialState());
 
   const value = useMemo(
     () => ({

@@ -31,36 +31,38 @@ export function TutorMarketplaceScreen() {
 
         return (
           <Card key={product.id}>
-          <View style={styles.productHeader}>
-            <Image source={{ uri: product.image }} style={styles.productImage} />
-            <View style={styles.productMeta}>
-              <Subheading>{product.title}</Subheading>
-              <Caption>{product.subtitle}</Caption>
+            <View style={styles.productHeader}>
+              <Image source={{ uri: product.image }} style={styles.productImage} />
+              <View style={styles.productMeta}>
+                <Subheading>{product.title}</Subheading>
+                <Caption>{product.subtitle}</Caption>
                 <Body style={styles.price}>R$ {formattedPrice}</Body>
-              <PillRow>
-                {product.badge ? <Pill variant="active">{product.badge}</Pill> : null}
-                <Pill variant={product.stock > 0 ? 'success' : 'warning'}>
-                  {product.stock > 0 ? `${product.stock} unidades` : 'Reposição em andamento'}
-                </Pill>
-              </PillRow>
-            </View>
-          </View>
-
-          <View style={styles.actions}>
-            <Button onPress={() => purchaseMarketplaceProduct(product.id)}>
-              {product.stock > 0 ? 'Reservar no carrinho' : 'Avise quando voltar'}
-            </Button>
-            <Button variant="secondary" onPress={() => toggleProductFavorite(product.id)}>
-              <View style={styles.inline}>
-                <Feather
-                  name={product.favorited ? 'heart' : 'heart'}
-                  size={18}
-                    color={product.favorited ? colors.accent : colors.muted}
-                />
-                  <Caption style={styles.inlineText}>{product.favorited ? 'Favoritado' : 'Favoritar'}</Caption>
+                <PillRow>
+                  {product.badge ? <Pill variant="active">{product.badge}</Pill> : null}
+                  <Pill variant={product.stock > 0 ? 'success' : 'warning'}>
+                    {product.stock > 0 ? `${product.stock} unidades` : 'Reposição em andamento'}
+                  </Pill>
+                </PillRow>
               </View>
-            </Button>
-          </View>
+            </View>
+
+            <View style={styles.actions}>
+              <Button onPress={() => purchaseMarketplaceProduct(product.id)}>
+                {product.stock > 0 ? 'Reservar no carrinho' : 'Avise quando voltar'}
+              </Button>
+              <Button variant="secondary" onPress={() => toggleProductFavorite(product.id)}>
+                <View style={styles.inline}>
+                  <Feather
+                    name="heart"
+                    size={18}
+                    color={product.favorited ? colors.accent : colors.primary}
+                  />
+                  <Caption style={[styles.inlineText, product.favorited ? styles.inlineTextActive : undefined]}>
+                    {product.favorited ? 'Favoritado' : 'Favoritar'}
+                  </Caption>
+                </View>
+              </Button>
+            </View>
           </Card>
         );
       })}
@@ -85,6 +87,8 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: 'rgba(15, 118, 110, 0.12)',
   },
   productMeta: {
     flex: 1,
@@ -105,5 +109,9 @@ const styles = StyleSheet.create({
   },
   inlineText: {
     fontWeight: '600',
+    color: colors.primary,
+  },
+  inlineTextActive: {
+    color: colors.accent,
   },
 });

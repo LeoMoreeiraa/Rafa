@@ -17,16 +17,16 @@ export function MapPlaceholder({ label = 'Emulação de rota', height = 160 }: M
 const styles = StyleSheet.create({
   base: {
     borderRadius: radius.lg,
-    backgroundColor: 'rgba(59, 130, 246, 0.35)',
+    backgroundColor: 'rgba(15, 118, 110, 0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(34, 211, 238, 0.35)',
+    borderColor: 'rgba(15, 118, 110, 0.22)',
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
     padding: 12,
   },
   label: {
-    backgroundColor: 'rgba(15, 23, 42, 0.75)',
-    color: colors.text,
+    backgroundColor: 'rgba(15, 118, 110, 0.9)',
+    color: '#ffffff',
     fontSize: 12,
     paddingHorizontal: 10,
     paddingVertical: 6,
